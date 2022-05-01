@@ -49,17 +49,21 @@ class Hasher:
 
     def validate(self, some_input):
         state = self.get_current_state()
-        return (self.mask(self.make_hash(state['seed'], some_input))
-             == self.mask(state['hash']))
+        return {
+            "success":(self.mask(self.make_hash(state['seed'], some_input))
+             == self.mask(state['hash'])),
+             "state":state
+        }
 
 class Coins:
     def __init__(self):
         self.users = {}
 
-    def add_coin(self, username, word):
+    def add_coin(self, username, word, state):
+
         with open("database.csv","a+") as database:
-            database.write(f"{username},{word},{hasher.get_current_hash()}"+
-                f",{hasher.seed}\n")
+            database.write(f"{username},{word},{state['hash']}"+
+                f",{state['seed']}\n")
 
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
@@ -90,8 +94,10 @@ def hello_world():
     message = "<p> Have a guess! </p>"
     state = hasher.get_current_state()
     if request.method == "POST":
-        if hasher.validate(request.form['word']):
-            coins.add_coin(request.form['username'], request.form['word'])
+        token = hasher.validate(request.form['word'])
+
+        if token["success"]:
+            coins.add_coin(request.form['username'], request.form['word'], token["state"])
             hasher.refresh()
             message = "<p> Good job! </p>"
         else:
