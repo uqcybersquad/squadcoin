@@ -62,7 +62,7 @@ class Coins:
             database.write(f"{username},{word},{state['hash']}"+
                 f",{state['seed']}\n")
         with open("solved_hashes.txt","a+") as hashfile:
-            hashfile.write(state["time"] + "\n") 
+            hashfile.write(str(state["time"]) + "\n") 
 
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
