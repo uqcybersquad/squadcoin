@@ -7,8 +7,8 @@ import random
 import binascii
 app = Flask(__name__)
 
-HASH_LENGTH = 5
-HASH_MASK = 0x3ffffffff
+HASH_MASK = 0xffffffff
+HASH_LENGTH = len(bin(HASH_MASK))[2:]//8 + 1
 SEED_LENGTH = 8
 
 BAD_HEX_ERR = 'bad hex value'
@@ -77,6 +77,15 @@ class Coins:
 
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
+
+@app.route("/updates")
+def get_updates():
+    retval = "<ul>"
+    with open("updates.txt","r") as updatelog:
+        for line in updatelog:
+            retval += f"<li>{line}</li>"
+    retval += "</ul>"
+    return retval
 
 @app.route('/ledger')
 def get_ledger():

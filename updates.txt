@@ -1,0 +1,2 @@
+1st May 11pm: Hash set it so we have to send hex encoded data.
+1st May 11:50pm: Bearded set it so the final bits are what gets masked (makes it easier for changing later).
