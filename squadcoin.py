@@ -20,12 +20,10 @@ class Hasher:
         return hashlib.md5(seed + word.encode()).digest()[:HASH_LENGTH]
 
     def get_state_from_int(self, time_seed):
-        print(time_seed)
         random.seed(time_seed)
         retval = {}
         retval["seed"] = random.randbytes(8)
         retval["hash"] = random.randbytes(HASH_LENGTH)
-        print(retval)
         return retval
 
     def get_current_state(self):
@@ -41,7 +39,6 @@ class Hasher:
                 saved_hash.write(str(seed_time))
         else:
             seed_time = int(seed_time)
-        print(seed_time)
         return self.get_state_from_int(seed_time)
 
     def get_current_hash(self):
