@@ -41,9 +41,6 @@ class Hasher:
             seed_time = int(seed_time)
         return self.get_state_from_int(seed_time)
 
-    def get_current_hash(self):
-        return hex_representation(self.hash)
-
     def mask(self, word):
         return int.from_bytes(word, "big") & HASH_MASK
 
@@ -98,7 +95,6 @@ def hello_world():
 
         if token["success"]:
             coins.add_coin(request.form['username'], request.form['word'], token["state"])
-            hasher.refresh()
             message = "<p> Good job! </p>"
         else:
             message = f"""<p> That's not right! You hashed to:
