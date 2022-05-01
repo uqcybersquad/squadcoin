@@ -104,8 +104,8 @@ def hello_world():
     message += "<p> See the <a href='/ledger'>ledger</a></p>"
     return f"""<h1>Squad Coins!</h1><p>So you wanna mine a squadcoin? I will
         give you some hash H, and some seed. You have to send me some message M
-        such that MD5(seed || M)[:4] = H. To make it easier, though, I will mask
-        off the first two bits of your hash and the original H.</p>
+        such that MD5(seed || M)[:5] = H. To make it easier, though, I will mask
+        off the first six bits of your hash and the original H.</p>
         <p>The hash is: {hex_representation(state['hash'])}</p>
         <p> The prepended random bytes are: {hex_representation(state['seed'])}
         </p>
