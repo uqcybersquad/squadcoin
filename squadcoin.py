@@ -8,7 +8,7 @@ import binascii
 app = Flask(__name__)
 
 HASH_MASK = 0xffffffff
-HASH_LENGTH = len(bin(HASH_MASK))[2:]//8 + 1
+HASH_LENGTH = len(bin(HASH_MASK)[2:])//8 + 1
 SEED_LENGTH = 8
 
 BAD_HEX_ERR = 'bad hex value'
@@ -60,7 +60,7 @@ class Hasher:
                 "state":state
             }
         return {
-            "success":inputhash == self.mask(state['hash'])),
+            "success":inputhash == self.mask(state['hash']),
             "state":state
         }
 
