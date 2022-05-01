@@ -78,7 +78,7 @@ class Coins:
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
 
-@app.route("/updates")
+@app.route("/update_log")
 def get_updates():
     retval = "<ul>"
     with open("updates.txt","r") as updatelog:
