@@ -11,6 +11,8 @@ HASH_LENGTH = 5
 HASH_MASK = 0x3ffffffff
 SEED_LENGTH = 8
 
+BAD_HEX_ERR = 'bad hex value'
+
 def hex_representation(bytestring):
     return " ".join([hex(b)[2:].zfill(2) for b in bytestring])
 
@@ -19,7 +21,10 @@ class Hasher:
         pass
 
     def make_hash(self, seed, hexword):
-        return hashlib.md5(seed, binascii.unhexlify(hexword).digest()[:HASH_LENGTH]
+        try:
+            return hashlib.md5(seed + binascii.unhexlify(hexword)).digest()[:HASH_LENGTH]
+        except binascii.Error:
+            return BAD_HEX_ERR
 
     def get_state_from_int(self, time_seed):
         random.seed(time_seed)
@@ -48,6 +53,12 @@ class Hasher:
 
     def validate(self, some_input):
         state = self.get_current_state()
+        inputhash = self.make_hash(state['seed'], some_input)
+        if inputhash == BAD_HEX_ERR:
+            return {
+                "success": False,
+                "state":state
+            }
         return {
             "success":(self.mask(self.make_hash(state['seed'], some_input))
              == self.mask(state['hash'])),
