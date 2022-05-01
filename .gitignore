@@ -130,3 +130,5 @@ dmypy.json
 
 # Only change database for testing purposes.
 database.csv
+solved_hashes.txt
+seed_time.txt
