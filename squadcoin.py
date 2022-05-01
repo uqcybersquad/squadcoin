@@ -4,11 +4,14 @@ import hashlib
 import string
 import time
 import random
+import binascii
 app = Flask(__name__)
 
 HASH_LENGTH = 5
 HASH_MASK = 0x3ffffffff
 SEED_LENGTH = 8
+
+BAD_HEX_ERR = 'bad hex value'
 
 def hex_representation(bytestring):
     return " ".join([hex(b)[2:].zfill(2) for b in bytestring])
@@ -17,8 +20,12 @@ class Hasher:
     def __init__(self):
         pass
 
-    def make_hash(self, seed, word):
-        return hashlib.md5(seed + word.encode()).digest()[:HASH_LENGTH]
+    def make_hash(self, seed, hexword):
+        try:
+            # print('hash:',hashlib.md5(seed + binascii.unhexlify(hexword)).hexdigest())
+            return hashlib.md5(seed + binascii.unhexlify(hexword)).digest()[:HASH_LENGTH]
+        except binascii.Error:
+            return BAD_HEX_ERR
 
     def get_state_from_int(self, time_seed):
         random.seed(time_seed)
@@ -47,6 +54,12 @@ class Hasher:
 
     def validate(self, some_input):
         state = self.get_current_state()
+        inputhash = self.make_hash(state['seed'], some_input)
+        if inputhash == BAD_HEX_ERR:
+            return {
+                "success": False,
+                "state":state
+            }
         return {
             "success":(self.mask(self.make_hash(state['seed'], some_input))
              == self.mask(state['hash'])),
@@ -103,13 +116,13 @@ def hello_world():
                 {hasher.make_hash(state['seed'],request.form['word'])}</p>"""
     message += "<p> See the <a href='/ledger'>ledger</a></p>"
     return f"""<h1>Squad Coins!</h1><p>So you wanna mine a squadcoin? I will
-        give you some hash H, and some seed. You have to send me some message M
+        give you some hash H, and some seed. You have to send me some message M (encoded in hex)
         such that MD5(seed || M)[:5] = H. To make it easier, though, I will mask
         off the first six bits of your hash and the original H.</p>
         <p>The hash is: {hex_representation(state['hash'])}</p>
         <p> The prepended random bytes are: {hex_representation(state['seed'])}
         </p>
-        <p> {message} <form action="/" method="post"> <p>What is a word that
+        <p> {message} <form action="/" method="post"> <p>What is a hex value that
         hashes to this value?</p>
         <input id="word" name="word" type="text"></input>
         <p>What is your username?</p> <input type="text" name="username"
