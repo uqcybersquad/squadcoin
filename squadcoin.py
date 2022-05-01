@@ -18,7 +18,7 @@ class Hasher:
         pass
 
     def make_hash(self, seed, word):
-        return hashlib.md5(seed + word.encode()).digest()[:HASH_LENGTH]
+        return hashlib.md5(seed + word.encode('ascii')).digest()[:HASH_LENGTH]
 
     def get_state_from_int(self, time_seed):
         random.seed(time_seed)
