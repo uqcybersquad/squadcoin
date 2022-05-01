@@ -6,8 +6,9 @@ import time
 import random
 app = Flask(__name__)
 
-HASH_LENGTH = 4
-HASH_MASK = 0x3fffffff
+HASH_LENGTH = 5
+HASH_MASK = 0x3ffffffff
+SEED_LENGTH = 8
 
 def hex_representation(bytestring):
     return " ".join([hex(b)[2:].zfill(2) for b in bytestring])
@@ -22,14 +23,13 @@ class Hasher:
     def get_state_from_int(self, time_seed):
         random.seed(time_seed)
         retval = {}
-        retval["seed"] = random.randbytes(8)
+        retval["seed"] = random.randbytes(SEED_LENGTH)
         retval["hash"] = random.randbytes(HASH_LENGTH)
         retval["time"] = time_seed
         return retval
 
     def get_current_state(self):
         with open('seed_time.txt', 'r') as saved_hash:
-            # Assume this is always an integer.
             seed_time = saved_hash.readline().strip()
         with open('solved_hashes.txt', 'r') as solved_times:
             solved = [line.strip() for line in solved_times]
@@ -62,7 +62,7 @@ class Coins:
             database.write(f"{username},{word},{state['hash']}"+
                 f",{state['seed']}\n")
         with open("solved_hashes.txt","a+") as hashfile:
-            hashfile.write(str(state["time"]) + "\n") 
+            hashfile.write(str(state["time"]) + "\n")
 
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
@@ -94,9 +94,9 @@ def hello_world():
     state = hasher.get_current_state()
     if request.method == "POST":
         token = hasher.validate(request.form['word'])
-
         if token["success"]:
-            coins.add_coin(request.form['username'], request.form['word'], token["state"])
+            coins.add_coin(request.form['username'], request.form['word'],
+                           token["state"])
             message = "<p> Good job! </p>"
         else:
             message = f"""<p> That's not right! You hashed to:
