@@ -24,6 +24,7 @@ class Hasher:
         retval = {}
         retval["seed"] = random.randbytes(8)
         retval["hash"] = random.randbytes(HASH_LENGTH)
+        retval["time"] = time_seed
         return retval
 
     def get_current_state(self):
@@ -57,10 +58,11 @@ class Coins:
         self.users = {}
 
     def add_coin(self, username, word, state):
-
         with open("database.csv","a+") as database:
             database.write(f"{username},{word},{state['hash']}"+
                 f",{state['seed']}\n")
+        with open("solved_hashes.txt","a+") as hashfile:
+            hashfile.write(state["time"] + "\n") 
 
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
