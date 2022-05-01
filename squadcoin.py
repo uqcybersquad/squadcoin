@@ -22,8 +22,7 @@ class Hasher:
 
     def make_hash(self, seed, hexword):
         try:
-            # print('hash:',hashlib.md5(seed + binascii.unhexlify(hexword)).hexdigest())
-            return hashlib.md5(seed + binascii.unhexlify(hexword)).digest()[:HASH_LENGTH]
+            return hashlib.md5(seed + binascii.unhexlify(hexword)).digest()
         except binascii.Error:
             return BAD_HEX_ERR
 
@@ -61,9 +60,8 @@ class Hasher:
                 "state":state
             }
         return {
-            "success":(self.mask(self.make_hash(state['seed'], some_input))
-             == self.mask(state['hash'])),
-             "state":state
+            "success":inputhash == self.mask(state['hash'])),
+            "state":state
         }
 
 class Coins:
@@ -116,9 +114,9 @@ def hello_world():
                 {hasher.make_hash(state['seed'],request.form['word'])}</p>"""
     message += "<p> See the <a href='/ledger'>ledger</a></p>"
     return f"""<h1>Squad Coins!</h1><p>So you wanna mine a squadcoin? I will
-        give you some hash H, and some seed. You have to send me some message M (encoded in hex)
-        such that MD5(seed || M)[:5] = H. To make it easier, though, I will mask
-        off the first six bits of your hash and the original H.</p>
+        give you some hash H, and some seed. You have to send me some message M
+        (encoded in hex) such that MD5(seed || M) matches H in the final
+        {len(bin(HASH_MASK)[2:])} bits.</p>
         <p>The hash is: {hex_representation(state['hash'])}</p>
         <p> The prepended random bytes are: {hex_representation(state['seed'])}
         </p>
