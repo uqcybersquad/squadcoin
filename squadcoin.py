@@ -60,7 +60,7 @@ class Hasher:
                 "state":state
             }
         return {
-            "success":inputhash == self.mask(state['hash']),
+            "success": self.mask(inputhash) == self.mask(state['hash']),
             "state":state
         }
 
