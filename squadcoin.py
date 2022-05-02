@@ -22,7 +22,7 @@ class Hasher:
 
     def make_hash(self, seed, hexword):
         try:
-            return hashlib.md5(seed + binascii.unhexlify(hexword)).digest()[:HASH_LENGTH]
+            return hashlib.md5(seed + binascii.unhexlify(hexword)).digest()
         except binascii.Error:
             return BAD_HEX_ERR
 
