@@ -1,0 +1,35 @@
+:root {
+  --purple: #5e17eb;
+  --purpleShadow: #6626e7;
+  --purpleHover: #8D1AF8;
+  --purpleShallow: #873a77;
+  --blueHighlight: #0AD6FF;
+  --noLink: #F327FA;
+}
+
+* {
+margin: 0;
+padding: 0;
+font-family: 'Inconsolata', monospace;
+color: var(--blueHighlight);
+}
+
+body {
+	background-color: black;
+}
+
+h1 {
+  color: var(--purple);
+}
+
+p {
+  color: white;
+}
+
+h3 {
+  color: white;
+}
+
+label {
+  color: white;
+}

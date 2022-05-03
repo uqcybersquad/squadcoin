@@ -7,8 +7,9 @@ import random
 import binascii
 app = Flask(__name__)
 
-HASH_MASK = 0xffffffff
-HASH_LENGTH = len(bin(HASH_MASK)[2:])//8 + 1
+NUM_BITS = 32
+HASH_MASK = int("1"*NUM_BITS, 2)
+HASH_LENGTH = NUM_BITS//8 + bool(NUM_BITS%8)
 SEED_LENGTH = 8
 
 BAD_HEX_ERR = 'bad hex value'
@@ -122,15 +123,16 @@ def hello_world():
             message = f"""<p> That's not right! You hashed to:
                 {hasher.make_hash(state['seed'],request.form['word'])}</p>"""
     message += "<p> See the <a href='/ledger'>ledger</a></p>"
-    return f"""<h1>Squad Coins!</h1><p>So you wanna mine a squadcoin? I will
+    return f"""<link type="text/css" rel="stylesheet" href="index.css">
+        <h1>Squad Coins!</h1><p>So you wanna mine a squadcoin? I will
         give you some hash H, and some seed. You have to send me some message M
         (encoded in hex) such that MD5(seed || M) matches H in the final
-        {len(bin(HASH_MASK)[2:])} bits.</p>
+        {NUM_BITS} bits.</p>
         <p>The hash is: {hex_representation(state['hash'])}</p>
         <p> The prepended random bytes are: {hex_representation(state['seed'])}
         </p>
-        <p> {message} <form action="/" method="post"> <p>What is a hex value that
-        hashes to this value?</p>
+        <p> {message} <form action="/" method="post"> <p>What is a hex value
+        that hashes to this value?</p>
         <input id="word" name="word" type="text"></input>
         <p>What is your username?</p> <input type="text" name="username"
         id="username"></input><input type="submit"></input></form>"""
