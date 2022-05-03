@@ -132,13 +132,13 @@ def hello_world():
     return f"""<link type="text/css" rel="stylesheet" href="index.css">
         <div align="center">
         <h1>Squad Coins!</h1><p>So you wanna mine a squadcoin? I will
-        give you some hash H, and some seed. You have to send me some message M
+        give you some hash H, and some seed.<br> You have to send me some message M
         (encoded in hex) such that MD5(seed || M) matches H in the final
-        {NUM_BITS} bits.</p>
+        {NUM_BITS} bits.</p><br><br>
         <p>The hash is: {hex_representation(state['hash'])}</p>
         <p> The prepended random bytes are: {hex_representation(state['seed'])}
         </p>
-        <p> {message} <form action="/" method="post"> <p>What is a hex value
+         {message} <br><form action="/" method="post"> <p>What is a hex value
         that hashes to this value?</p>
         <input id="word" name="word" type="text"></input>
         <p>What is your username?</p> <input type="text" name="username"
