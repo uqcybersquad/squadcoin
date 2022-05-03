@@ -80,7 +80,7 @@ class Coins:
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
 
 @app.route("/index.css")
-def css:
+def css():
     with open("index.css","r") as cssfile:
         retval = cssfile.read()
     return retval
