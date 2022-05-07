@@ -142,7 +142,9 @@ def hello_world():
         that hashes to this value?</p>
         <input id="word" name="word" type="text"></input>
         <p>What is your username?</p> <input type="text" name="username"
-        id="username"></input><input type="submit"></input></form></div>"""
+        id="username"></input><input type="submit"></input></form>
+
+        <a href="https://github.com/uqcybersquad/squadcoin">Github</a></div>"""
 
 hasher = Hasher()
 coins = Coins()
