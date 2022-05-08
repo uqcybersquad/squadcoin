@@ -79,6 +79,14 @@ class Coins:
     def sanitise(self, name):
         return "".join([s for s in name.lower() if s in string.ascii_lowercase])
 
+@app.route("/api")
+def api():
+    state = hasher.get_current_state()
+    state.update({"bitmask":NUM_BITS})
+    state["seed"] = hex(int.from_bytes(state["seed"], "big"))[2:]
+    state["hash"] = hex(int.from_bytes(state["hash"], "big"))[2:]
+    return f"{state}"
+
 @app.route("/index.css")
 def css():
     with open("index.css","r") as cssfile:
