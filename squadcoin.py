@@ -7,7 +7,7 @@ import random
 import binascii
 app = Flask(__name__)
 
-NUM_BITS = 32
+NUM_BITS = 34
 HASH_MASK = int("1"*NUM_BITS, 2)
 HASH_LENGTH = NUM_BITS//8 + bool(NUM_BITS%8)
 SEED_LENGTH = 8
