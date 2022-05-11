@@ -125,7 +125,7 @@ def get_ledger():
 
 @app.route('/', methods=["GET","POST"])
 def hello_world():
-    message = "<p> Have a guess! </p>"
+    message = "<p> Have a guess please! </p>"
     state = hasher.get_current_state()
     if request.method == "POST":
         token = hasher.validate(request.form['word'])
